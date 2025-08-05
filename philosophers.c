@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:27:47 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/05 15:51:40 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/05 16:16:05 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int parce_args(char **args)
 void	action_loop(t_philo *philo)
 {
 	check_life(SET);
+	init_time(SET);
 	while(1)
 	{
 		if (check_life(GET) >= philo->table->time_to_die || philo->table->is_died)
@@ -80,12 +81,10 @@ void	philo_create(t_table table)
 	i = 0;
 	philo = malloc(sizeof(t_philo) * table.num_philos);
 	tid = malloc(sizeof(pthread_t) * table.num_philos);
-	init_time(SET);
 	while (i < table.num_philos)
 	{
 		set_philos(i, &table, &philo[i]);
 		pthread_create(&tid[i], NULL, philo_routine, &philo[i]);
-		philo[i].tid = tid[i];
 		i += 2;
 	}
 	i = 1;
@@ -94,7 +93,6 @@ void	philo_create(t_table table)
 	{
 		set_philos(i, &table, &philo[i]);
 		pthread_create(&tid[i], NULL, philo_routine, &philo[i]);
-		philo[i].tid = tid[i];
 		i += 2;
 	}
 	i = 0;
@@ -104,6 +102,8 @@ void	philo_create(t_table table)
 			return ;
 		i++;
 	}
+	free(tid);
+	free(philo);
 }
 
 int	main(int ac, char **av)
