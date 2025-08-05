@@ -38,7 +38,6 @@ int parce_args(char **args)
 void	action_loop(t_philo *philo)
 {
 	check_life(SET);
-	init_time(SET);
 	while(1)
 	{
 		if (check_life(GET) >= philo->table->time_to_die || philo->table->is_died)
@@ -68,6 +67,14 @@ void	*philo_routine(void *arg)
 	t_philo	philo;
 
 	philo = *(t_philo *) arg;
+
+	pthread_mutex_lock(&philo.table->first);
+	if (philo.table->is_first)
+	{
+		philo.table->is_first = 0;
+		init_time(SET);
+	}
+	pthread_mutex_unlock(&philo.table->first);
 	action_loop(&philo);
 	return(NULL);
 }
@@ -98,7 +105,7 @@ void	philo_create(t_table table)
 	i = 0;
 	while (i < table.num_philos)
 	{
-		if (pthread_join(philo[i].tid, NULL) == -1)
+		if (pthread_join(tid[i], NULL) == -1)
 			return ;
 		i++;
 	}

@@ -27,7 +27,9 @@ int init_mutexs(t_table *table)
 			return (1);
 		}
 	if (pthread_mutex_init(&table->print, NULL))
-			return (1);
+		return (1);
+	if (pthread_mutex_init(&table->first, NULL))
+		return (1);
 	return (0);
 }
 
@@ -38,6 +40,7 @@ int	philo_init(int ac, char **av, t_table *table)
 	table->time_to_die = ft_atoi(av[2]);
 	table->time_to_eat = ft_atoi(av[3]);
 	table->is_died = 0;
+	table->is_first = 1;
 	if (ac == 6)
 	{
 		table->n_philo_eat = ft_atoi(av[5]);

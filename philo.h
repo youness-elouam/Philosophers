@@ -28,9 +28,11 @@ typedef struct s_table
 	int				n_philo_eat;
 	int				is_have_eatnum;
 	int				is_died;
+	int				is_first;
 	struct s_philo *philos;
 	pthread_mutex_t *forks;
 	pthread_mutex_t	print;
+	pthread_mutex_t	first;
 }	t_table;
 
 typedef struct s_philo
