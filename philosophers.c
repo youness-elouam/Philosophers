@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:27:47 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/09 14:30:36 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:36:25 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,10 +192,9 @@ int	main(int ac, char **av)
 
 	if (ac < 5)
 		return (printf("this program must take 3 or 4 arguments"), 1);
-	write(1, &av[4][3], 1);
 	if (parce_args(av))
 		return (printf("error: arguments incorrect (must be just digits)"), 1);
 	if (philo_init(ac, av, &table))
-		return (printf("error: arguments incorrect (must be digits >= 0)"), 1);
+		return (printf("error: arguments incorrect (must be digits > 0)"), 1);
 	philo_create(table);
 }
