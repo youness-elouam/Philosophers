@@ -6,13 +6,13 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:54:29 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/07 18:21:15 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 00:08:31 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philo.h"
 
-int init_mutexs(t_table *table)
+int	init_mutexs(t_table *table)
 {
 	int	i;
 
@@ -21,11 +21,13 @@ int init_mutexs(t_table *table)
 	if (!table->forks)
 		return (1);
 	while (i < table->num_philos)
+	{
 		if (pthread_mutex_init(&table->forks[i++], NULL))
 		{
 			free(table->forks);
 			return (1);
 		}
+	}
 	if (pthread_mutex_init(&table->print, NULL))
 		return (1);
 	if (pthread_mutex_init(&table->first, NULL))
@@ -51,7 +53,7 @@ int	philo_init(int ac, char **av, t_table *table)
 	else
 		table->is_have_eatnum = 0;
 	if (init_mutexs(table))
-		return(1);
+		return (1);
 	return (0);
 }
 
@@ -68,6 +70,7 @@ void	set_philos(int i, t_table *table, t_philo *philo)
 	philo->philo_id = (i + 1);
 	philo->table = table;
 	philo->r_fork = &table->forks[i];
+	philo->num_of_eat = 0;
 	if (i == 0)
 		philo->l_fork = &table->forks[table->num_philos - 1];
 	else
