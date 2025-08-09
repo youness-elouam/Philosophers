@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:27:47 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/09 14:36:25 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 17:30:25 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	check_if_is_die(t_philo *philo)
 	long	time;
 
 	i = 0;
+	time = 0;
+	// for (i = 0; i < philo[0].table->num_philos; i++)
+	// {
+	// 	philo[i].last_eat = init_time(GET);
+	// }
 	while (philo[i].table->is_died == 0)
 	{
 		pthread_mutex_lock(&philo->table->died);
@@ -108,8 +113,9 @@ void	action_loop(t_philo *philo)
 		philo->last_eat = init_time(GET);
 		pthread_mutex_unlock(&philo->table->died);
 		m_sleep(philo->table->time_to_eat);
-		pthread_mutex_unlock(philo->l_fork);
 		pthread_mutex_unlock(philo->r_fork);
+		pthread_mutex_unlock(philo->l_fork);
+
 		print_action(philo->philo_id, "is sleeping", philo);
 		m_sleep(philo->table->time_to_sleep);
 		print_action(philo->philo_id, "is thinking", philo);
@@ -133,8 +139,8 @@ void	*philo_routine(void *arg)
 	{
 		philo->table->is_first = 0;
 		init_time(SET);
-		philo->last_eat = init_time(GET);
 	}
+	philo->last_eat = init_time(GET);
 	pthread_mutex_unlock(&philo->table->first);
 	if (philo->table->num_philos == 1)
 		one_philo(philo);
@@ -191,10 +197,10 @@ int	main(int ac, char **av)
 	t_table	table;
 
 	if (ac < 5)
-		return (printf("this program must take 3 or 4 arguments"), 1);
+		return (printf("this program must take 3 or 4 arguments\n"), 1);
 	if (parce_args(av))
-		return (printf("error: arguments incorrect (must be just digits)"), 1);
+		return (printf("error: arguments incorrect (must be just digits)\n"), 1);
 	if (philo_init(ac, av, &table))
-		return (printf("error: arguments incorrect (must be digits > 0)"), 1);
+		return (printf("error: arguments incorrect (must be digits >= 0)"), 1);
 	philo_create(table);
 }
