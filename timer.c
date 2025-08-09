@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:59:51 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/08 17:43:05 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:13:21 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	m_sleep(int t)
 	{
 		gettimeofday(&tv, NULL);
 		c_time = ((tv.tv_usec / 1000) + (tv.tv_sec * 1000));
+		usleep(25);
 	}
-	usleep(25);
 }
 
 long int	init_time(t_method method)

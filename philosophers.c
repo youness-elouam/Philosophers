@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:27:47 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/09 00:41:48 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:30:36 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,22 +98,29 @@ void	action_loop(t_philo *philo)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->table->died);
-		pthread_mutex_lock(philo->l_fork);
-		print_action(philo->philo_id, "has taken a left fork", philo);
 		pthread_mutex_lock(philo->r_fork);
 		print_action(philo->philo_id, "has taken a right fork", philo);
+		pthread_mutex_lock(philo->l_fork);
+		print_action(philo->philo_id, "has taken a left fork", philo);
 		print_action(philo->philo_id, "is eating", philo);
 		philo->num_of_eat++;
 		pthread_mutex_lock(&philo->table->died);
 		philo->last_eat = init_time(GET);
 		pthread_mutex_unlock(&philo->table->died);
 		m_sleep(philo->table->time_to_eat);
-		pthread_mutex_unlock(philo->r_fork);
 		pthread_mutex_unlock(philo->l_fork);
+		pthread_mutex_unlock(philo->r_fork);
 		print_action(philo->philo_id, "is sleeping", philo);
 		m_sleep(philo->table->time_to_sleep);
 		print_action(philo->philo_id, "is thinking", philo);
 	}
+}
+
+void	one_philo(t_philo *philo)
+{
+	print_action(philo->philo_id, "has taken a right fork", philo);
+	m_sleep(philo->table->time_to_die);
+	print_action(philo->philo_id, "died", philo);
 }
 
 void	*philo_routine(void *arg)
@@ -129,7 +136,10 @@ void	*philo_routine(void *arg)
 		philo->last_eat = init_time(GET);
 	}
 	pthread_mutex_unlock(&philo->table->first);
-	action_loop(philo);
+	if (philo->table->num_philos == 1)
+		one_philo(philo);
+	else
+		action_loop(philo);
 	return (NULL);
 }
 
@@ -184,7 +194,8 @@ int	main(int ac, char **av)
 		return (printf("this program must take 3 or 4 arguments"), 1);
 	write(1, &av[4][3], 1);
 	if (parce_args(av))
-		return (printf("error: arguments incorrect (must be just digits)"), 10);
-	philo_init(ac, av, &table);
+		return (printf("error: arguments incorrect (must be just digits)"), 1);
+	if (philo_init(ac, av, &table))
+		return (printf("error: arguments incorrect (must be digits >= 0)"), 1);
 	philo_create(table);
 }

@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:54:29 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/09 00:08:31 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:15:15 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,24 @@ int	init_mutexs(t_table *table)
 	return (0);
 }
 
+int	check_args(char **av)
+{
+	int	i;
+
+	i = 1;
+	while (av[i])
+	{
+		if (ft_atoi(av[i]) <= 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	philo_init(int ac, char **av, t_table *table)
 {
+	if (check_args(av))
+		return (1);
 	table->num_philos = ft_atoi(av[1]);
 	table->time_to_sleep = ft_atoi(av[4]);
 	table->time_to_die = ft_atoi(av[2]);
