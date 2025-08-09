@@ -33,15 +33,12 @@ long	init_time(t_method method)
 {
 	static struct timeval	tv;
 	struct timeval			time;
-	long					c_time;
 
-	c_time = 0;
 	if (method == SET)
 	{
 		gettimeofday(&tv, NULL);
 		return (0);
 	}
 	gettimeofday(&time, NULL);
-	c_time = (((time.tv_usec / 1000) + (time.tv_sec * 1000)) - ((tv.tv_usec / 1000) + (tv.tv_sec * 1000)));
-	return (c_time);
+	return (((time.tv_usec / 1000) + (time.tv_sec * 1000)) - ((tv.tv_usec / 1000) + (tv.tv_sec * 1000)));
 }

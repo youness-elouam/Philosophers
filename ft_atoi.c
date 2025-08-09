@@ -14,9 +14,9 @@
 
 int	ft_atoi(const char *str)
 {
-	int	i;
-	int	n;
-	int	s;
+	int		i;
+	long	n;
+	int		s;
 
 	i = 0;
 	n = 0;
@@ -33,6 +33,8 @@ int	ft_atoi(const char *str)
 	while (str[i] && (str[i] >= 48 && str[i] <= 57))
 	{
 		n = n * 10 + str[i] - '0';
+		if (n > 2147483647)
+			return(0);
 		i++;
 	}
 	return (n * s);

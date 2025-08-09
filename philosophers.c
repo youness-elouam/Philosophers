@@ -94,25 +94,28 @@ void	action_loop(t_philo *philo)
 			pthread_mutex_unlock(&philo->table->died);
 			break ;
 		}
-		pthread_mutex_unlock(&philo->table->died);
-		pthread_mutex_lock(philo->r_fork);
+pthread_mutex_unlock(&philo->table->died);
+pthread_mutex_lock(philo->r_fork);
 		print_action(philo->philo_id, "has taken a right fork", philo);
-		pthread_mutex_lock(philo->l_fork);
+pthread_mutex_lock(philo->l_fork);
 		print_action(philo->philo_id, "has taken a left fork", philo);
 		print_action(philo->philo_id, "is eating", philo);
 		philo->num_of_eat++;
-		pthread_mutex_lock(&philo->table->died);
+pthread_mutex_lock(&philo->table->died);
 		philo->last_eat = init_time(GET);
-		pthread_mutex_unlock(&philo->table->died);
+pthread_mutex_unlock(&philo->table->died);
 		m_sleep(philo->table->time_to_eat);
-		pthread_mutex_unlock(philo->r_fork);
-		pthread_mutex_unlock(philo->l_fork);
+pthread_mutex_unlock(philo->l_fork);
+pthread_mutex_unlock(philo->r_fork);
 		print_action(philo->philo_id, "is sleeping", philo);
 		m_sleep(philo->table->time_to_sleep);
 		print_action(philo->philo_id, "is thinking", philo);
 	}
 }
-
+/*
+2147483647
+6147483647
+*/
 void	one_philo(t_philo *philo)
 {
 	print_action(philo->philo_id, "has taken a right fork", philo);
@@ -129,7 +132,9 @@ void	*philo_routine(void *arg)
 	if (philo->table->is_first)
 	{
 		philo->table->is_first = 0;
+		pthread_mutex_lock(&philo->table->died);
 		init_time(SET);
+		pthread_mutex_unlock(&philo->table->died);
 	}
 	philo->last_eat = init_time(GET);
 	pthread_mutex_unlock(&philo->table->first);
