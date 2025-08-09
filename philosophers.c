@@ -61,15 +61,21 @@ int	philo_eat_limit(t_philo *philo)
 void	check_if_is_die(t_philo *philo)
 {
 	int		i;
+	int		time_to_die;
 	long	time;
 
 	i = 0;
+	if(philo[1].table->time_to_die)
+		printf("");
+	time_to_die = philo[i].table->time_to_die;
+	time = 0;
 	while (philo[i].table->is_died == 0)
 	{
 		pthread_mutex_lock(&philo->table->died);
 		time = init_time(GET) - philo[i].last_eat;
 		pthread_mutex_unlock(&philo->table->died);
-		if (time >= philo[i].table->time_to_die)
+		//printf("-------------------[%ld]\n\n", time);
+		if (time >= time_to_die)
 		{
 			time = init_time(GET) - philo[i].last_eat;
 			print_action(philo[i].philo_id, "died", &philo[i]);
@@ -191,11 +197,10 @@ int	main(int ac, char **av)
 	t_table	table;
 
 	if (ac < 5)
-		return (printf("this program must take 3 or 4 arguments"), 1);
-	write(1, &av[4][3], 1);
+		return (printf("this program must take 3 or 4 arguments\n"), 1);
 	if (parce_args(av))
-		return (printf("error: arguments incorrect (must be just digits)"), 1);
+		return (printf("error: arguments incorrect (must be just digits)\n"), 1);
 	if (philo_init(ac, av, &table))
-		return (printf("error: arguments incorrect (must be digits >= 0)"), 1);
+		return (printf("error: arguments incorrect (must be digits > 0)\n"), 1);
 	philo_create(table);
 }
