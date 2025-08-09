@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:27:47 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/09 17:30:25 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 17:56:02 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ int	parce_args(char **args)
 		while (args[i][j])
 		{
 			if (!ft_isdigit(args[i][j]))
-			{
-				printf("-------->[%c]->i = %d j = %d\n", args[i][j], i, j);
 				return (1);
-			}
 			j++;
 		}
 		i++;
@@ -46,7 +43,7 @@ int	philo_eat_limit(t_philo *philo)
 		return (0);
 	while (i < philo[0].table->num_philos)
 	{
-		if (philo[i].num_of_eat == philo[i].table->n_philo_eat)
+		if (philo[i].num_of_eat >= philo[0].table->n_philo_eat)
 			n++;
 		i++;
 	}
@@ -65,10 +62,6 @@ void	check_if_is_die(t_philo *philo)
 
 	i = 0;
 	time = 0;
-	// for (i = 0; i < philo[0].table->num_philos; i++)
-	// {
-	// 	philo[i].last_eat = init_time(GET);
-	// }
 	while (philo[i].table->is_died == 0)
 	{
 		pthread_mutex_lock(&philo->table->died);
@@ -85,8 +78,7 @@ void	check_if_is_die(t_philo *philo)
 		}
 		if (philo_eat_limit(philo))
 			break ;
-		i++;
-		if (i == (philo[0].table->num_philos))
+		if (++i == (philo[0].table->num_philos))
 			i = 0;
 		usleep(25);
 	}
@@ -115,7 +107,6 @@ void	action_loop(t_philo *philo)
 		m_sleep(philo->table->time_to_eat);
 		pthread_mutex_unlock(philo->r_fork);
 		pthread_mutex_unlock(philo->l_fork);
-
 		print_action(philo->philo_id, "is sleeping", philo);
 		m_sleep(philo->table->time_to_sleep);
 		print_action(philo->philo_id, "is thinking", philo);
@@ -201,6 +192,6 @@ int	main(int ac, char **av)
 	if (parce_args(av))
 		return (printf("error: arguments incorrect (must be just digits)\n"), 1);
 	if (philo_init(ac, av, &table))
-		return (printf("error: arguments incorrect (must be digits >= 0)"), 1);
+		return (printf("error: arguments incorrect (must be digits >= 0)\n"), 1);
 	philo_create(table);
 }
