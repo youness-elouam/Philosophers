@@ -6,7 +6,7 @@
 /*   By: yel-ouam <yel-ouam@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:59:51 by yel-ouam          #+#    #+#             */
-/*   Updated: 2025/08/09 16:34:43 by yel-ouam         ###   ########.fr       */
+/*   Updated: 2025/08/09 23:22:57 by yel-ouam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ long	init_time(t_method method)
 {
 	static struct timeval	tv;
 	struct timeval			time;
+	long					c_time;
 
+	c_time = 0;
 	if (method == SET)
 	{
 		gettimeofday(&tv, NULL);
 		return (0);
 	}
 	gettimeofday(&time, NULL);
-	return (((time.tv_usec / 1000) + (time.tv_sec * 1000)) - ((tv.tv_usec / 1000) + (tv.tv_sec * 1000)));
+	c_time = (((time.tv_usec / 1000) + (time.tv_sec * 1000))
+			- ((tv.tv_usec / 1000) + (tv.tv_sec * 1000)));
+	return (c_time);
 }
